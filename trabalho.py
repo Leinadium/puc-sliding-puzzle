@@ -39,9 +39,9 @@ def tarefa1():
 
     # contando as arestas
     quantidade_arestas = 0
-    for n in nodes:
-        n.gera_vizinhos()
-        quantidade_arestas += len(n.vizinhos)
+    for nd in nodes:
+        nd.gera_vizinhos()
+        quantidade_arestas += len(nd.vizinhos)
 
     # arestas = #vizinhos / 2. Pois estão sendo contadas duas vezes cada aresta
     quantidade_arestas //= 2
@@ -99,25 +99,31 @@ def breadth_first_search(nodes_nao_visitados: ConjuntoNodes,
                 nodes_nao_visitados.remove(node)
 
     # quando acabou prox_nivel, a fila ainda não foi reiniciada. Entao o ultimo nivel esta na fila
-    print(f"Niveis no grafo: {i_nivel}")
     return fila
 
 
+def tarefa2():
+    # gera os nodes
+    g: ConjuntoNodes = gera_nodes()
+    for nod in g:
+        nod.gera_vizinhos()
+    print(f"Total de nodes no grafo: {g.size}")
+
+    nodes_verificados: ConjuntoNodes = ConjuntoNodes()     # conjunto vazio
+    nodes_nao_visitados: ConjuntoNodes = g.clone()         # conjunto completo
+    q_conexos = 0
+
+    while nodes_verificados.size != g.size:
+        q_conexos += 1
+        breadth_first_search(
+            nodes_nao_visitados=nodes_nao_visitados,
+            nodes_visitados=nodes_verificados,
+            node_inicial=None
+        )
+
+    print(f"Total de conexos: {q_conexos}")
+    return
+
+
 if __name__ == "__main__":
-    # tarefa1()
-    print("gerando grafo")
-    g = gera_nodes()
-    print("gerando vizinhos")
-    for n in g:
-        n.gera_vizinhos()
-
-    print(f"{g.size}")
-
-    print("executando bfs")
-    nv = ConjuntoNodes()
-    x = breadth_first_search(
-        nodes_nao_visitados=g,
-        nodes_visitados=nv,
-        node_inicial=None
-    )
-    print(f'{x.size=}, {nv.size=}')
+    tarefa2()
