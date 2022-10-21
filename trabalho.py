@@ -52,7 +52,7 @@ def tarefa1():
 def breadth_first_search(nodes_nao_visitados: ConjuntoNodes,
                          nodes_visitados: ConjuntoNodes,
                          node_inicial: Optional[Node] = None
-                         ) -> ConjuntoNodes:
+                         ) -> Tuple[ConjuntoNodes, int]:
     """Executa o algoritmo de BFS nos nós do grafo a partir de um nó especifico
 
     A função modifica os dois ConjuntosNodes fornecidos, adicionando ou removendo nodes.
@@ -68,6 +68,7 @@ def breadth_first_search(nodes_nao_visitados: ConjuntoNodes,
 
     Returns:
         (ConjuntoNode): Conjunto contendo os nodes do último nível verificado
+        (int): A quantidade de níveis verificados
     """
     prox_nivel = ConjuntoNodes()
     fila: ConjuntoNodes = ConjuntoNodes()
@@ -83,7 +84,7 @@ def breadth_first_search(nodes_nao_visitados: ConjuntoNodes,
 
     while prox_nivel:
         # novo nivel
-        print(f"{i_nivel=}")
+        # print(f"{i_nivel=}")
         fila = prox_nivel.clone()
         prox_nivel.clear()
         i_nivel += 1
@@ -99,7 +100,7 @@ def breadth_first_search(nodes_nao_visitados: ConjuntoNodes,
                 nodes_nao_visitados.remove(node)
 
     # quando acabou prox_nivel, a fila ainda não foi reiniciada. Entao o ultimo nivel esta na fila
-    return fila
+    return fila, i_nivel
 
 
 def tarefa2():
@@ -125,5 +126,45 @@ def tarefa2():
     return
 
 
+def tarefa3(g: ConjuntoNodes, node_inicial: Node) -> Tuple[Node, int]:
+    """Descobre o node com maior distância do Node inicial fornecido, utilizando BFS no grafo recebido
+
+    Args:
+        g (ConjuntoNodes):
+            Conjunto contendo todos os nodes do grafo
+        node_inicial (Node):
+            Node inicial
+
+    Returns:
+        (Node): O node com maior distância do node inicial
+        (int): O tamanho do caminho até o node mais distante
+    """
+    nodes_verificados: ConjuntoNodes = ConjuntoNodes()     # conjunto vazio
+    nodes_nao_visitados: ConjuntoNodes = g.clone()         # conjunto completo
+
+    # faz o BFS
+    nodes_mais_distantes, q_niveis = breadth_first_search(
+        nodes_nao_visitados=nodes_nao_visitados,
+        nodes_visitados=nodes_verificados,
+        node_inicial=node_inicial
+    )
+
+    # pega o node mais distante
+    node_mais_distante = nodes_mais_distantes.popfirst()
+    return node_mais_distante, q_niveis
+
+
 if __name__ == "__main__":
-    tarefa2()
+    g: ConjuntoNodes = gera_nodes()
+    for n in g:
+        n.gera_vizinhos()
+
+    nd_distante, distancia = tarefa3(
+        g=g,
+        node_inicial=Node.from_conf("12345678x")
+    )
+
+    print("Configuracao inicial viável mais distante da configuração final:")
+    print(nd_distante.representacao_3x3())
+    print("Numero de movimentos necessarios até o node mais distante:")
+    print(distancia)

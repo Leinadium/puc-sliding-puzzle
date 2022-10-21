@@ -84,3 +84,19 @@ class Node:
 
     def __repr__(self):
         return f'<Node "{self.configuracao}">'
+
+    def representacao_3x3(self) -> str:
+        """Retorna o Node em uma matriz 3x3
+
+        Imprime o Node em uma matriz 3x3,
+        em que coluna da matriz é separada por '\t',
+        e cada linha é separada por '\n'
+
+        Returns:
+            (str): a representação do Node
+        """
+        return (
+            f'{self.configuracao[0]}\t{self.configuracao[1]}\t{self.configuracao[2]}\n'
+            f'{self.configuracao[3]}\t{self.configuracao[4]}\t{self.configuracao[5]}\n'
+            f'{self.configuracao[6]}\t{self.configuracao[7]}\t{self.configuracao[8]}'
+        )
